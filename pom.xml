@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+
+    <!-- 所包含的模块, 引入子模块 -->
+    <modules>
+        <module>eureka</module>
+        <module>system</module>
+    </modules>
+
+    <!-- 所继承的父模块 -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.0.1.RELEASE</version>
+        <relativePath/>
+    </parent>
+
+    <!-- 本身项目的相关信息 -->
+    <groupId>com.hb</groupId>
+    <artifactId>course</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>course</name>
+    <description>Online-Course Project</description>
+
+    <!--  自定义属性信息
+      Spring Cloud采用伦敦地铁站的名称进行命名，
+      同时根据字母表的顺序来对应版本时间顺序-->
+    <properties>
+        <java.version>1.8</java.version>
+        <spring-cloud.version>Finchley.SR4</spring-cloud.version>
+    </properties>
+
+    <!-- 相关依赖 -->
+    <dependencies>
+
+        <!-- 单元测试, scope：compile, test, provided, import.. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+    </dependencies>
+
+    <!-- 对所依赖的jar包进行版本管理, 统一管理项目的版本号,
+    只声明版本依赖, 不会真正的引入jar包. 通常出现在项目的顶层pom文件中 -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <!-- 编译插件 -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
