@@ -75,9 +75,13 @@
 
 <script>
   /*在<script> 标签中写的js代码是全局的, 会影响其他页面*/
-    $('body').attr('class', 'login-layout light-login');
+  /* mounted 为vue的初始化函数, 类似于mounted, created之类的函数称为钩子函数  */
     export default {
-        name: 'Login',
+        name: 'login',
+        mounted: function() {
+            $('body').removeClass('no-skin');
+            $('body').attr('class', 'login-layout light-login');
+        },
         methods: {
             login (){
                 this.$router.push("/admin");
