@@ -1,6 +1,8 @@
 package com.course.server.service;
 
+import com.course.server.domain.Chapter;
 import com.course.server.dto.ChapterDto;
+import com.course.server.dto.PageDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +22,6 @@ public interface ChapterService {
      * @Params:
      * @Returns:
     */
-    public List<ChapterDto> list();
+    public PageDto<Chapter> list(PageDto pageDto);
 
 }
