@@ -166,12 +166,15 @@
             * */
             list(page) {
                 let _this = this;
+                // 加载框
+                Loading.show();
                 // post 默认用json来向后端传递数据
                 // _this.$refs.xxx 获取子组件变量/操作
                 _this.$ajax.post('http://localhost:9000/business/admin/chapter/list', {
                     page: page,
                     size: _this.$refs.pagination.size,
                 }).then((response) => {
+                    Loading.hide();
                     console.log("查询到大章结果:", response);
                     let res = response.data;
                     _this.chapters = res.content.list;
@@ -184,16 +187,25 @@
             * */
             save() {
                 let _this = this;
+                // 进行数据校验
+                if (!Validator.require(_this.chapter.name, "名称")
+                    || !Validator.require(_this.chapter.courseId, "课程ID")
+                    || !Validator.require(_this.chapter.courseId, "课程ID", 1, 8)){
+                    return;
+                }
+                Loading.show();
                 // post 默认用json来向后端传递数据
                 _this.$ajax.post('http://localhost:9000/business/admin/chapter/save', _this.chapter
                 ).then((response) => {
+                    Loading.hide();
                     console.log("新增大章结果:", response);
                     let res = response.data;
                     if(res.success){
                         $("#form-modal").modal("hide");
                         _this.list(1);
+                        toast.success("新增成功");
                     }else {
-                        alert(res.message);
+                        toast.error(res.message);
                     }
 
                 })
@@ -203,20 +215,24 @@
             * */
             del(id) {
                 let _this = this;
-                // post 默认用json来向后端传递数据
-                // 使用Restful请求在后面直接拼接
-                _this.$ajax.delete('http://localhost:9000/business/admin/chapter/delete/' + id
-                ).then((response) => {
-                    console.log("删除大章结果:", response);
-                    let res = response.data;
-                    if(res.success){
-                        alert(res.message);
-                        _this.list(1);
-                    }else {
-                        alert(res.message);
-                    }
-
-                })
+                // 确认弹出框
+                Confirm.show("删除后不可恢复!", function () {
+                    Loading.show();
+                    // post 默认用json来向后端传递数据
+                    // 使用Restful请求在后面直接拼接
+                    _this.$ajax.delete('http://localhost:9000/business/admin/chapter/delete/' + id
+                    ).then((response) => {
+                        Loading.hide();
+                        console.log("删除大章结果:", response);
+                        let res = response.data;
+                        if(res.success){
+                            toast.success("删除成功!");
+                            _this.list(1);
+                        }else {
+                            toast.error("删除失败!");
+                        }
+                    });
+                });
             }
         }
     }

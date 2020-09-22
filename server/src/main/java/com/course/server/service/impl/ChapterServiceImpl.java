@@ -72,11 +72,11 @@ public class ChapterServiceImpl implements ChapterService {
      * @Params: chapterDto
      * @Returns: int
     */
-    public int save(ChapterDto chapterDto) {
+    public void save(ChapterDto chapterDto) {
        if (StringUtils.isEmpty(chapterDto.getId())){
-           return insert(chapterDto);
+          insert(chapterDto);
        }else {
-           return edit(chapterDto);
+           edit(chapterDto);
        }
     }
 
@@ -99,12 +99,12 @@ public class ChapterServiceImpl implements ChapterService {
      * @Params: null
      * @Returns:
     */
-    private int insert(ChapterDto chapterDto) {
+    private void insert(ChapterDto chapterDto) {
         // 设置UUID
         chapterDto.setId(UUIDUtil.getShortUuid());
         Chapter chapter = new Chapter();
         BeanUtils.copyProperties(chapterDto, chapter);
-        return chapterMapper.insert(chapter);
+        chapterMapper.insert(chapter);
     }
 
     /**
@@ -114,8 +114,8 @@ public class ChapterServiceImpl implements ChapterService {
      * @Params: null
      * @Returns:
     */
-    private int edit(ChapterDto chapterDto) {
+    private void edit(ChapterDto chapterDto) {
         Chapter chapter = CopyUtil.copy(chapterDto, Chapter.class);
-        return chapterMapper.updateByPrimaryKey(chapter);
+        chapterMapper.updateByPrimaryKey(chapter);
     }
 }
