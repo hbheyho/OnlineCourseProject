@@ -15,13 +15,7 @@ import java.util.List;
 @Service
 public interface ChapterService {
 
-    /**
-     * @Author: HB
-     * @Description: 大章列表查询
-     * @Date: 10:00 2020/9/21
-     * @Params:
-     * @Returns:
-    */
-    public PageDto<Chapter> list(PageDto pageDto);
-
+     PageDto<Chapter> list(PageDto pageDto);
+     int save(ChapterDto chapterDto);
+     int delete(String id);
 }
