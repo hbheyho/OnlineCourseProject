@@ -170,7 +170,7 @@
                 Loading.show();
                 // post 默认用json来向后端传递数据
                 // _this.$refs.xxx 获取子组件变量/操作
-                _this.$ajax.post('http://localhost:9000/business/admin/chapter/list', {
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/chapter/list', {
                     page: page,
                     size: _this.$refs.pagination.size,
                 }).then((response) => {
@@ -195,7 +195,7 @@
                 }
                 Loading.show();
                 // post 默认用json来向后端传递数据
-                _this.$ajax.post('http://localhost:9000/business/admin/chapter/save', _this.chapter
+                _this.$ajax.post(process.env.VUE_APP_SERVER  + '/business/admin/chapter/save', _this.chapter
                 ).then((response) => {
                     Loading.hide();
                     console.log("新增大章结果:", response);
@@ -220,7 +220,7 @@
                     Loading.show();
                     // post 默认用json来向后端传递数据
                     // 使用Restful请求在后面直接拼接
-                    _this.$ajax.delete('http://localhost:9000/business/admin/chapter/delete/' + id
+                    _this.$ajax.delete(process.env.VUE_APP_SERVER  + '/business/admin/chapter/delete/' + id
                     ).then((response) => {
                         Loading.hide();
                         console.log("删除大章结果:", response);
