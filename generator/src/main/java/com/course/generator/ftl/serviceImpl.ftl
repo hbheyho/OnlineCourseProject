@@ -17,6 +17,7 @@ import org.springframework.util.StringUtils;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
 /**
  * @Author: HB
@@ -42,6 +43,12 @@ public class ${Domain}ServiceImpl implements ${Domain}Service {
         PageHelper.startPage(pageDto.getPage(),pageDto.getSize());
         // 进行数据查询
         ${Domain}Example ${domain}Example = new ${Domain}Example();
+        // 排序条件
+        <#list fieldList as field >
+            <#if field.nameHump == "sort">
+                ${domain}Example.setOrderByClause("sort asc");
+            </#if>
+        </#list>
         List<${Domain}> ${domain}List = ${domain}Mapper.selectByExample(${domain}Example);
         // 进行分页信息组装
         PageInfo<${Domain}> pageInfo = new PageInfo<>(${domain}List);
@@ -92,10 +99,22 @@ public class ${Domain}ServiceImpl implements ${Domain}Service {
      * @Returns:
     */
     private void insert(${Domain}Dto ${domain}Dto) {
+
         // 设置UUID
         ${domain}Dto.setId(UUIDUtil.getShortUuid());
         ${Domain} ${domain} = new ${Domain}();
         BeanUtils.copyProperties(${domain}Dto, ${domain});
+
+        Date now = new Date();
+        <#list fieldList as field >
+            <#if field.nameHump == "createdAt">
+                ${domain}.setCreatedAt(now);
+            </#if>
+            <#if field.nameHump == "updatedAt">
+                ${domain}.setUpdatedAt(now);
+            </#if>
+        </#list>
+
         ${domain}Mapper.insert(${domain});
     }
 
@@ -108,6 +127,14 @@ public class ${Domain}ServiceImpl implements ${Domain}Service {
     */
     private void edit(${Domain}Dto ${domain}Dto) {
         ${Domain} ${domain} = CopyUtil.copy(${domain}Dto, ${Domain}.class);
+
+        Date now = new Date();
+        <#list fieldList as field >
+            <#if field.nameHump == "updatedAt">
+                ${domain}.setUpdatedAt(now);
+            </#if>
+        </#list>
+
         ${domain}Mapper.updateByPrimaryKey(${domain});
     }
 }

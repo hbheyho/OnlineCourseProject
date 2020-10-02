@@ -16,12 +16,13 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
  * @Author: HB
  * @Description:
- * @CreateDate: 15:43 2020/10/02
+ * @CreateDate: 22:09 2020/10/02
  */
 @Service("sectionService")
 public class SectionServiceImpl implements SectionService {
@@ -32,7 +33,7 @@ public class SectionServiceImpl implements SectionService {
     /**
      * @Author: HB
      * @Description: 列表
-     * @Date: 15:43 2020/10/02
+     * @Date: 22:09 2020/10/02
      * @Params:
      * @Returns:
      */
@@ -42,6 +43,8 @@ public class SectionServiceImpl implements SectionService {
         PageHelper.startPage(pageDto.getPage(),pageDto.getSize());
         // 进行数据查询
         SectionExample sectionExample = new SectionExample();
+        // 排序条件
+                sectionExample.setOrderByClause("sort asc");
         List<Section> sectionList = sectionMapper.selectByExample(sectionExample);
         // 进行分页信息组装
         PageInfo<Section> pageInfo = new PageInfo<>(sectionList);
@@ -60,7 +63,7 @@ public class SectionServiceImpl implements SectionService {
     /**
      * @Author: HB
      * @Description: 新增/修改
-     * @Date: 15:43 2020/10/02
+     * @Date: 22:09 2020/10/02
      * @Params:
      * @Returns: int
     */
@@ -75,7 +78,7 @@ public class SectionServiceImpl implements SectionService {
     /**
      * @Author: HB
      * @Description: 删除
-     * @Date: 15:43 2020/10/02
+     * @Date: 22:09 2020/10/02
      * @Params: null
      * @Returns:
     */
@@ -87,27 +90,37 @@ public class SectionServiceImpl implements SectionService {
     /**
      * @Author: HB
      * @Description: 新增
-     * @Date: 15:43 2020/10/02
+     * @Date: 22:09 2020/10/02
      * @Params: null
      * @Returns:
     */
     private void insert(SectionDto sectionDto) {
+
         // 设置UUID
         sectionDto.setId(UUIDUtil.getShortUuid());
         Section section = new Section();
         BeanUtils.copyProperties(sectionDto, section);
+
+        Date now = new Date();
+        section.setCreatedAt(now);
+        section.setUpdatedAt(now);
+
         sectionMapper.insert(section);
     }
 
     /**
      * @Author: HB
      * @Description: 修改
-     * @Date: 15:43 2020/10/02
+     * @Date: 22:09 2020/10/02
      * @Params: null
      * @Returns:
     */
     private void edit(SectionDto sectionDto) {
         Section section = CopyUtil.copy(sectionDto, Section.class);
+
+        Date now = new Date();
+        section.setUpdatedAt(now);
+
         sectionMapper.updateByPrimaryKey(section);
     }
 }

@@ -12,8 +12,8 @@ import javax.annotation.Resource;
 
 /**
  * @Author: HB
- * @Description: 小节Controller
- * @CreateDate: 15:43 2020/10/02
+ * @Description: 小节 Controller
+ * @CreateDate: 22:09 2020/10/02
  */
 
 @RestController
@@ -29,7 +29,7 @@ public class SectionController {
     /**
      * @Author: HB
      * @Description:
-     * @Date: 15:43 2020/10/02
+     * @Date: 22:09 2020/10/02
      * @Params: pageDto
      * @Returns: pageDto
      */
@@ -44,16 +44,17 @@ public class SectionController {
     /**
      * @Author: HB
      * @Description: 新增/编辑小节
-     * @Date: 15:43 2020/10/02
+     * @Date: 22:09 2020/10/02
      * @Params: null
      * @Returns:
      */
     @RequestMapping("/save")
     public ResponseDto save(@RequestBody SectionDto sectionDto) {
 
-        /*ValidatorUtil.require(sectionDto.getName(), "名称");
-        ValidatorUtil.require(sectionDto.getCourseId(), "课程ID");
-        ValidatorUtil.length(sectionDto.getCourseId(), "课程ID", 1, 8);*/
+        // 进行数据校验
+                    ValidatorUtil.require(sectionDto.getTitle(), "标题");
+                    ValidatorUtil.length(sectionDto.getTitle(), "标题", 1 , 50);
+                    ValidatorUtil.length(sectionDto.getVideo(), "视频", 1 , 200);
 
         ResponseDto responseDto = new ResponseDto<>();
         sectionService.save(sectionDto);
@@ -64,7 +65,7 @@ public class SectionController {
     /**
      * @Author: HB
      * @Description: 删除小节数据 - Restful风格
-     * @Date: 15:43 2020/10/02
+     * @Date: 22:09 2020/10/02
      * @Params: id
      * @Returns:
     */

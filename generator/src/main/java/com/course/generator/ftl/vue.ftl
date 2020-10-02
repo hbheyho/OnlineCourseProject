@@ -19,7 +19,9 @@
       <thead>
       <tr>
         <#list fieldList as field>
-          <th>${field.nameCn}</th>
+          <#if field.nameHump != "createdAt" && field.nameHump != "updatedAt">
+            <th>${field.nameCn}</th>
+          </#if>
         </#list>
         <th>操作</th>
       </tr>
@@ -29,7 +31,9 @@
 
       <tr v-for="${domain} in ${domain}s">
         <#list  fieldList as field>
-          <td>{{${domain}.${field.nameHump}}}</td>
+          <#if field.nameHump != "createdAt" && field.nameHump != "updatedAt">
+            <td>{{${domain}.${field.nameHump}}}</td>
+          </#if>
         </#list>
         <!-- 一行中的相关操作 -->
         <td>
@@ -97,12 +101,14 @@
             <form class="form-horizontal">
 
               <#list fieldList as field>
-                <div class="form-group">
-                  <label class="col-sm-2 control-label">${field.nameCn}</label>
-                  <div class="col-sm-10">
-                    <input v-model="${domain}.${field.nameHump}" type="text"  class="form-control">
+                <#if field.name != "id" && field.nameHump != "createdAt" && field.nameHump != "updatedAt">
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">${field.nameCn}</label>
+                    <div class="col-sm-10">
+                      <input v-model="${domain}.${field.nameHump}" type="text"  class="form-control">
+                    </div>
                   </div>
-                </div>
+                </#if>
               </#list>
 
             </form>
@@ -185,12 +191,23 @@
             * */
             save() {
                 let _this = this;
-                /*// 进行数据校验
-                if (!Validator.require(_this.${domain}.name, "名称")
-                    || !Validator.require(_this.${domain}.courseId, "课程ID")
-                    || !Validator.require(_this.${domain}.courseId, "课程ID", 1, 8)){
-                    return;
-                }*/
+
+                // 进行数据校验, 增加 1!=1, 来去掉最前面的 ||
+                if ( 1 != 1
+                  <#list fieldList as field>
+                    <#if field.name != "id" && field.nameHump != "createdAt" && field.nameHump != "updatedAt" && field.nameHump != "sort">
+                      <#if !field.nullAble>
+                        || !Validator.require(_this.${domain}.${field.nameHump}, "${field.nameCn}")
+                      </#if>
+                      <#if (field.length > 0)>
+                        || !Validator.length(_this.${domain}.${field.nameHump}, "${field.nameCn}", 1 , ${field.length})
+                      </#if>
+                    </#if>
+                  </#list>
+                ){
+                  return;
+                }
+
                 Loading.show();
                 // post 默认用json来向后端传递数据
                 _this.$ajax.post(process.env.VUE_APP_SERVER  + '/${module}/admin/${domain}/save', _this.${domain}
