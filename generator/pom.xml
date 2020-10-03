@@ -29,6 +29,12 @@
             <groupId>org.dom4j</groupId>
             <artifactId>dom4j</artifactId>
         </dependency>
+
+        <!-- 添加Server依赖 -->
+        <dependency>
+            <groupId>com.hb</groupId>
+            <artifactId>server</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

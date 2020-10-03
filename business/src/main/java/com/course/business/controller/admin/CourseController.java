@@ -1,10 +1,10 @@
-package com.course.${module}.controller.admin;
+package com.course.business.controller.admin;
 
 
-import com.course.server.dto.${Domain}Dto;
+import com.course.server.dto.CourseDto;
 import com.course.server.dto.PageDto;
 import com.course.server.dto.ResponseDto;
-import com.course.server.service.${Domain}Service;
+import com.course.server.service.CourseService;
 import com.course.server.util.ValidatorUtil;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,67 +12,63 @@ import javax.annotation.Resource;
 
 /**
  * @Author: HB
- * @Description: ${name} Controller
- * @CreateDate: ${date}
+ * @Description: 课程 Controller
+ * @CreateDate: 14:37 2020/10/03
  */
 
 @RestController
-@RequestMapping("/admin/${domain}")
-public class ${Domain}Controller {
+@RequestMapping("/admin/course")
+public class CourseController {
 
     // 日志所用标识
-    private static final String BUSINESS_NAME = "${name}";
+    private static final String BUSINESS_NAME = "课程";
 
     @Resource
-    private ${Domain}Service ${domain}Service;
+    private CourseService courseService;
 
     /**
      * @Author: HB
      * @Description:
-     * @Date: ${date}
+     * @Date: 14:37 2020/10/03
      * @Params: pageDto
      * @Returns: pageDto
      */
     @RequestMapping("/list")
     public ResponseDto list(@RequestBody PageDto pageDto) {
         ResponseDto responseDto = new ResponseDto<>();
-        responseDto.setContent(${domain}Service.list(pageDto));
+        responseDto.setContent(courseService.list(pageDto));
         return responseDto;
     }
 
 
     /**
      * @Author: HB
-     * @Description: 新增/编辑${name}
-     * @Date: ${date}
+     * @Description: 新增/编辑课程
+     * @Date: 14:37 2020/10/03
      * @Params: null
      * @Returns:
      */
     @RequestMapping("/save")
-    public ResponseDto save(@RequestBody ${Domain}Dto ${domain}Dto) {
+    public ResponseDto save(@RequestBody CourseDto courseDto) {
 
         // 进行数据校验
-        <#list fieldList as field>
-            <#if field.name != "id" && field.nameHump != "createdAt" && field.nameHump != "updatedAt" && field.nameHump != "sort ">
-                <#if !field.nullAble>
-                    ValidatorUtil.require(${domain}Dto.get${field.nameBigHump}(), "${field.nameCn}");
-                </#if>
-                <#if (field.length > 0)>
-                    ValidatorUtil.length(${domain}Dto.get${field.nameBigHump}(), "${field.nameCn}", 1 , ${field.length?c});
-                </#if>
-            </#if>
-        </#list>
+                    ValidatorUtil.require(courseDto.getName(), "名称");
+                    ValidatorUtil.length(courseDto.getName(), "名称", 1 , 50);
+                    ValidatorUtil.length(courseDto.getSummary(), "概述", 1 , 2000);
+                    ValidatorUtil.require(courseDto.getPrice(), "价格(元)");
+                    ValidatorUtil.length(courseDto.getImage(), "封面", 1 , 100);
+                    ValidatorUtil.require(courseDto.getLevel(), "级别");
 
         ResponseDto responseDto = new ResponseDto<>();
-        ${domain}Service.save(${domain}Dto);
-        responseDto.setContent(${domain}Dto);
+        courseService.save(courseDto);
+        responseDto.setContent(courseDto);
         return responseDto;
     }
 
     /**
      * @Author: HB
-     * @Description: 删除${name}数据 - Restful风格
-     * @Date: ${date}
+     * @Description: 删除课程数据 - Restful风格
+     * @Date: 14:37 2020/10/03
      * @Params: id
      * @Returns:
     */
@@ -80,7 +76,7 @@ public class ${Domain}Controller {
     public ResponseDto delete(@PathVariable String id) {
         ResponseDto responseDto = new ResponseDto<>();
         try {
-            int result = ${domain}Service.delete(id);
+            int result = courseService.delete(id);
             if (result < 1){
                 responseDto.setSuccess(false);
                 responseDto.setMessage("删除失败,请重新再试");

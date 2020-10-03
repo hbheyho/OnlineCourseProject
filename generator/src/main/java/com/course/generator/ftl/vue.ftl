@@ -32,7 +32,11 @@
       <tr v-for="${domain} in ${domain}s">
         <#list  fieldList as field>
           <#if field.nameHump != "createdAt" && field.nameHump != "updatedAt">
-            <td>{{${domain}.${field.nameHump}}}</td>
+            <#if field.enums>
+              <td>{{${field.enumsConst} | optionKV(${domain}.${field.nameHump})}}</td>
+            <#else>
+              <td>{{${domain}.${field.nameHump}}}</td>
+            </#if>
           </#if>
         </#list>
         <!-- 一行中的相关操作 -->
@@ -102,12 +106,23 @@
 
               <#list fieldList as field>
                 <#if field.name != "id" && field.nameHump != "createdAt" && field.nameHump != "updatedAt">
-                  <div class="form-group">
-                    <label class="col-sm-2 control-label">${field.nameCn}</label>
-                    <div class="col-sm-10">
-                      <input v-model="${domain}.${field.nameHump}" type="text"  class="form-control">
+                  <#if field.enums>
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label">${field.nameCn}</label>
+                      <div class="col-sm-10">
+                        <select v-model="${domain}.${field.nameHump}" class="form-control">
+                          <option v-for="o in ${field.enumsConst}" v-bind:value="o.key">{{o.value}}</option>
+                        </select>
+                      </div>
                     </div>
-                  </div>
+                  <#else>
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label">${field.nameCn}</label>
+                      <div class="col-sm-10">
+                        <input v-model="${domain}.${field.nameHump}" type="text"  class="form-control">
+                      </div>
+                    </div>
+                  </#if>
                 </#if>
               </#list>
 
@@ -129,14 +144,19 @@
     import Pagination from "../../components/pagination";
 
     export default {
-        name: "${domain}",
+        name: "business-${domain}",
         components: {Pagination},
         // 使用data定义组件内的变量,可用于做双向数据绑定
         // ${domain}变量用来绑定form表单的数据
         data: function () {
             return {
                 ${domain}: {},
-                ${domain}s: []
+                ${domain}s: [],
+                <#list fieldList as field>
+                  <#if field.enums>
+                    ${field.enumsConst}: ${field.enumsConst},
+                  </#if>
+                </#list>
             }
         },
         mounted: function () {
@@ -200,7 +220,8 @@
                         || !Validator.require(_this.${domain}.${field.nameHump}, "${field.nameCn}")
                       </#if>
                       <#if (field.length > 0)>
-                        || !Validator.length(_this.${domain}.${field.nameHump}, "${field.nameCn}", 1 , ${field.length})
+                        // ?c 解决 2000 ->2,000问题
+                        || !Validator.length(_this.${domain}.${field.nameHump}, "${field.nameCn}", 1 , ${field.length?c})
                       </#if>
                     </#if>
                   </#list>

@@ -1,6 +1,8 @@
 package com.course.generator.util;
 
-/*import com.course.generator.enums.EnumGenerator;*/
+/*import com.course.generator.server.EnumGenerator;*/
+
+import com.course.generator.server.EnumGenerator;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -90,7 +92,7 @@ public class DbUtil {
                     field.setLength(0);
                 }
 
-                /*if (comment.contains("枚举")) {
+                if (comment.contains("枚举")) {
                     field.setEnums(true);
 
                     // 以课程等级为例：从注释中的“枚举[CourseLevelEnum]”，得到COURSE_LEVEL
@@ -101,7 +103,7 @@ public class DbUtil {
                     field.setEnumsConst(enumsConst);
                 } else {
                     field.setEnums(false);
-                }*/
+                }
 
                 fieldList.add(field);
             }

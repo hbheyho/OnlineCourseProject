@@ -125,7 +125,7 @@
     import Pagination from "../../components/pagination";
 
     export default {
-        name: "chapter",
+        name: "business-chapter",
         components: {Pagination},
         // 使用data定义组件内的变量,可用于做双向数据绑定
         // chapter变量用来绑定form表单的数据
